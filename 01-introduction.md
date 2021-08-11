@@ -90,9 +90,6 @@ _"First of all, the datacenter we used crashed last night,
     so we'll need you to deploy the application again,
     but that shouldn't be a problem, you've found the code, right?"_
 
-- [02-testing](./02-testing.md).
-- [02-containers](./02-containers.md).
-- [02-container-registry](./02-container-registry.md).
 - [02-run-app](./02-run-app.md).
 - [03-containers](./03-containers.md).
 - [03-automation](./03-automation.md).
