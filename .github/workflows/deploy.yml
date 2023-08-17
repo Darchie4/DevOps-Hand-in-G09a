@@ -7,7 +7,7 @@ on:
       - completed
 
 jobs:
-  check-bats-version:
+  deploy:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     container:
@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - run: mkdir -p ~/.kube
-      - run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
-      - run: kubectl apply -f kubernetes/
+      - name: Make directory "~/.kube"
+        run: mkdir -p ~/.kube
+      - name: Injecting secrets
+        run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
+      - name: Apply Kubernetes manifests
+        run: kubectl apply -f kubernetes/
