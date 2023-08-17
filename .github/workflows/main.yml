@@ -22,8 +22,8 @@ jobs:
 
       - name: Test
         run: go test frontend backend
-  golangci:
-    name: lint
+
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -34,11 +34,8 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
-          # Require: The version of golangci-lint to use.
-          # When `install-mode` is `binary` (default) the value can be v1.2 or v1.2.3 or `latest` to use the latest version.
-          # When `install-mode` is `goinstall` the value can be v1.2.3, `latest`, or the hash of a commit.
-          version: v1.53
-
+          version: latest
+          args: ./backend/... ./frontend/...
         
   publish-docker-to-github:
     runs-on: ubuntu-latest
