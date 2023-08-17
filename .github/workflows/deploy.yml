@@ -8,6 +8,6 @@ jobs:
     container:
       image: bitnami/kubectl:latest
     steps:
-      - run: mkdir -p ~/.kube/config
+      - run: mkdir -p ~/.kube
       - run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
       - run: kubectl get all
