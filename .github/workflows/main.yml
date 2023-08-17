@@ -38,6 +38,9 @@ jobs:
           args: ./backend/... ./frontend/...
         
   publish-docker-to-github:
+    needs:
+      - build
+      - lint
     runs-on: ubuntu-latest
     permissions:
       contents: read
