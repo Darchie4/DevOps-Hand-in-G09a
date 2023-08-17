@@ -29,7 +29,10 @@ var myClient = &http.Client{Timeout: 10 * time.Second}
 
 func HealthzHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	io.WriteString(w, "healthy")
+	_, err := io.WriteString(w, "healthy")
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func main() {
@@ -37,7 +40,7 @@ func main() {
 	http.HandleFunc("/healthz", HealthzHandler)
 	fmt.Print("starting up")
 	http.HandleFunc("/api/random", func(w http.ResponseWriter, r *http.Request) {
-		resp, err := myClient.Get(fmt.Sprintf("http://%s:%s/fortunes/random", BACKEND_DNS, BACKEND_PORT))
+		resp, err := myClient.Get(fmt.Sprintf("http://%s:%s/fortunes/random", BACKEND_DNS, BACKEND_PORT)) //nolint:all
 		if err != nil {
 			log.Fatalln(err)
 			fmt.Fprint(w, err)
@@ -45,14 +48,16 @@ func main() {
 		}
 
 		f := new(fortune)
-		json.NewDecoder(resp.Body).Decode(f)
+		err = json.NewDecoder(resp.Body).Decode(f)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		fmt.Fprint(w, f.Message)
-		return
 	})
 
 	http.HandleFunc("/api/all", func(w http.ResponseWriter, r *http.Request) {
-		resp, err := myClient.Get(fmt.Sprintf("http://%s:%s/fortunes", BACKEND_DNS, BACKEND_PORT))
+		resp, err := myClient.Get(fmt.Sprintf("http://%s:%s/fortunes", BACKEND_DNS, BACKEND_PORT)) //nolint:all
 		if err != nil {
 			log.Fatalln(err)
 			fmt.Fprint(w, err)
@@ -60,7 +65,10 @@ func main() {
 		}
 
 		fortunes := new([]fortune)
-		json.NewDecoder(resp.Body).Decode(fortunes)
+		err = json.NewDecoder(resp.Body).Decode(fortunes)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		tmpl, err := template.ParseFiles("./templates/fortunes.html")
 
@@ -70,24 +78,28 @@ func main() {
 			return
 		}
 
-		tmpl.Execute(w, fortunes)
-		return
+		err = tmpl.Execute(w, fortunes)
+		if err != nil {
+			log.Fatal(err)
+		}
 	})
 
 	http.HandleFunc("/api/add", func(w http.ResponseWriter, r *http.Request) {
-
 		if r.Method != "POST" {
 			http.Error(w, "Use POST", http.StatusMethodNotAllowed)
 			return
 		}
 
 		f := new(newFortune)
-		json.NewDecoder(r.Body).Decode(f)
+		err := json.NewDecoder(r.Body).Decode(f)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-		var postUrl = fmt.Sprintf("http://%s:%s/fortunes", BACKEND_DNS, BACKEND_PORT)
-		var jsonStr = []byte(fmt.Sprintf(`{"id": "%d", "message": "%s"}`, rand.Intn(10000), f.Message))
+		var postUrl = fmt.Sprintf("http://%s:%s/fortunes", BACKEND_DNS, BACKEND_PORT)                   //nolint:all
+		var jsonStr = []byte(fmt.Sprintf(`{"id": "%d", "message": "%s"}`, rand.Intn(10000), f.Message)) //nolint:all
 
-		_, err := myClient.Post(postUrl, "application/json", bytes.NewBuffer(jsonStr))
+		_, err = myClient.Post(postUrl, "application/json", bytes.NewBuffer(jsonStr))
 		if err != nil {
 			log.Fatalln(err)
 			fmt.Fprint(w, err)
@@ -95,8 +107,6 @@ func main() {
 		}
 
 		fmt.Fprint(w, "Cookie added!")
-
-		return
 	})
 
 	http.Handle("/", http.FileServer(http.Dir("./static")))
