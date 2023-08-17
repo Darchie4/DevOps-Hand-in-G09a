@@ -1,10 +1,12 @@
+//nolint:all
 package main
 
 import (
 	"fmt"
-	"github.com/gomodule/redigo/redis"
 	"log"
 	"sync"
+
+	"github.com/gomodule/redigo/redis"
 )
 
 var dbLink redis.Conn
