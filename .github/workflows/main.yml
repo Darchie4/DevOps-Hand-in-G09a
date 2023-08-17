@@ -34,8 +34,9 @@ jobs:
           cache: false
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
-      - name: Lint
-        run: golangci-lint run ./backend/... ./frontend/...
+        with:
+          version: latest
+          args: ./backend/... ./frontend/...
         
   publish-docker-to-github:
     runs-on: ubuntu-latest
