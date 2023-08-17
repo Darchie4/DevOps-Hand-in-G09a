@@ -10,4 +10,4 @@ jobs:
     steps:
       - run: mkdir -p ~/.kube
       - run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
-      - run: kubectl get all
+      - run: kubectl apply -f kubernetes/
