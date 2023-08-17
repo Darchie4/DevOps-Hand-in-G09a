@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "8083:8081"
+    environment:
+      - BACKEND_DNS=backend
+    depends_on:
+      - backend
+  backend:
+    build: ./backend
