@@ -35,7 +35,7 @@ func HealthzHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 
     http.HandleFunc("/healthz", HealthzHandler)
-
+    fmt.Print("starting up")
     http.HandleFunc("/api/random", func (w http.ResponseWriter, r *http.Request) {
         resp, err := myClient.Get(fmt.Sprintf("http://%s:%s/fortunes/random", BACKEND_DNS, BACKEND_PORT))
         if err != nil {
@@ -100,5 +100,6 @@ func main() {
     })
 
     http.Handle("/", http.FileServer(http.Dir("./static")))
-    http.ListenAndServe(":8080", nil)
+    err := http.ListenAndServe(":8081", nil)
+    fmt.Println("%v", err)
 }
