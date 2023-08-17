@@ -5,5 +5,9 @@ on: [workflow_dispatch]
 jobs:
   check-bats-version:
     runs-on: [self-hosted]
+    container:
+      image: bitnami/kubectl:latest
+      volumes:
+        - /kube_config:/.kube/config
     steps:
-      - run: cat /kube_config
+      - run: kubectl get all
