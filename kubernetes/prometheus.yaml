@@ -10,7 +10,7 @@ spec:
   selector:
     matchLabels:
       app: prometheus-server
-  serviceName: "prometheus-service" 
+  serviceName: "prometheus-service"
   # You need to provide a serviceName for a StatefulSet
   template:
     metadata:
@@ -47,7 +47,7 @@ spec:
 
   volumeClaimTemplates:
     - metadata:
-        name: prometheus-storage-volume  
+        name: prometheus-storage-volume
         # Use the same name as the one in volumeMounts
       spec:
         accessModes:
@@ -56,4 +56,3 @@ spec:
           requests:
             storage: 1Gi
         storageClassName: gp2
-

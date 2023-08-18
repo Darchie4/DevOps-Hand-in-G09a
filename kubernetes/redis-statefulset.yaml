@@ -15,13 +15,13 @@ spec:
         app: redis-stateful
     spec:
       containers:
-      - name: redis-stateful
-        image: redis
-        ports:
-          - containerPort: 6379
-        volumeMounts:
-          - name: fortunes
-            mountPath: /data
+        - name: redis-stateful
+          image: redis
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: fortunes
+              mountPath: /data
   volumeClaimTemplates:
     - metadata:
         name: fortunes
