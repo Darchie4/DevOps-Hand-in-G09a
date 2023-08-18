@@ -13,13 +13,12 @@ spec:
         app: frontend
     spec:
       containers:
-      - name: frontend-container
-        image: ghcr.io/darchie4/devops-hand-in-g09a:main-frontend
-        ports:
-        - containerPort: 8081
-        env:
-        - name: BACKEND_DNS
-          value: "backend"
-        - name: BACKEND_PORT
-          value: "9000"
-          
+        - name: frontend-container
+          image: ghcr.io/darchie4/devops-hand-in-g09a:main-frontend
+          ports:
+            - containerPort: 8081
+          env:
+            - name: BACKEND_DNS
+              value: "backend"
+            - name: BACKEND_PORT
+              value: "9000"
