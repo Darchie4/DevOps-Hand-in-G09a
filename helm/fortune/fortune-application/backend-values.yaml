@@ -1,0 +1,12 @@
+image:
+  port: 9000
+  version: main-backend
+envs:
+- name: REDIS_DNS
+  value: "redis"
+- name: REDIS_PORT
+  value: "6379"
+
+service:
+  type: ClusterIP 
+  port: 9000
