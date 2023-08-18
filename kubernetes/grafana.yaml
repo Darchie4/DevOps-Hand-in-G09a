@@ -47,7 +47,7 @@ spec:
             runAsUser: 0
   volumeClaimTemplates:
     - metadata:
-        name: grafana-pv  # This should match the name in volumeMounts
+        name: grafana-pv
       spec:
         accessModes:
           - ReadWriteOnce
