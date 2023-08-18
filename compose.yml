@@ -18,11 +18,11 @@ services:
     environment:
       REDIS_DNS: redis
       REDIS_PORT: 6379
-      
+
   frontend:
     build: ./frontend
     ports:
-    - "8081:8081"
+      - "8081:8081"
     depends_on:
       - backend
 
