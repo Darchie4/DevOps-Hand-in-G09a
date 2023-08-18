@@ -30,7 +30,7 @@ jobs:
           args: ./backend/... ./frontend/...
 
       - name: YAML linting
-      - uses: ibiqlik/action-yamllint@v3
+        uses: ibiqlik/action-yamllint@v3
 
         
   publish-docker-to-github:
