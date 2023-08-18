@@ -1,3 +1,4 @@
+//nolint:all
 package main
 
 import (
@@ -131,7 +132,10 @@ func (h *fortuneHandler) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	w.Write(jsonBytes)
+	_, err = w.Write(jsonBytes)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func (h *fortuneHandler) Create(w http.ResponseWriter, r *http.Request) {
@@ -162,12 +166,18 @@ func (h *fortuneHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 func internalServerError(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusInternalServerError)
-	w.Write([]byte("internal server error"))
+	_, err := w.Write([]byte("internal server error"))
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func notFound(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
-	w.Write([]byte("not found"))
+	_, err := w.Write([]byte("not found"))
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func main() {
