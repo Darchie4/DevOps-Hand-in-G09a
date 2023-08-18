@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,3 +22,4 @@ spec:
           value: "backend"
         - name: BACKEND_PORT
           value: "9000"
+          
