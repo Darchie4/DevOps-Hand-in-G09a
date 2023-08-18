@@ -19,12 +19,12 @@ spec:
     spec:
       containers:
         - args:
-          - --path.sysfs=/host/sys
-          - --path.rootfs=/host/root
-          - --no-collector.wifi
-          - --no-collector.hwmon
-          - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
-          - --collector.netclass.ignored-devices=^(veth.*)$
+            - --path.sysfs=/host/sys
+            - --path.rootfs=/host/root
+            - --no-collector.wifi
+            - --no-collector.hwmon
+            - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
+            - --collector.netclass.ignored-devices=^(veth.*)$
           name: node-exporter
           image: prom/node-exporter
           ports:
