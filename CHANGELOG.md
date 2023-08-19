@@ -1,3 +1,15 @@
+# v0.0.3 (Sat Aug 19 2023)
+
+#### ⚠️ Pushed to `main`
+
+- added chmod to helm file ([@OthelloEngineer](https://github.com/OthelloEngineer))
+
+#### Authors: 1
+
+- Joakim Leed ([@OthelloEngineer](https://github.com/OthelloEngineer))
+
+---
+
 # v0.0.2 (Sat Aug 19 2023)
 
 #### ⚠️ Pushed to `main`
