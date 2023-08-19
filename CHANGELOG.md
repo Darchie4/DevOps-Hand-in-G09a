@@ -1,3 +1,15 @@
+# v0.0.4 (Sat Aug 19 2023)
+
+#### ⚠️ Pushed to `main`
+
+- removed sudo from line in runner ([@OthelloEngineer](https://github.com/OthelloEngineer))
+
+#### Authors: 1
+
+- Joakim Leed ([@OthelloEngineer](https://github.com/OthelloEngineer))
+
+---
+
 # v0.0.3 (Sat Aug 19 2023)
 
 #### ⚠️ Pushed to `main`
