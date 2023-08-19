@@ -1,5 +1,5 @@
 DOCKER_REGISTRY = ghcr.io
-DOCKER_NAMESPACE = Darchie4
+DOCKER_NAMESPACE = darchie4
 DOCKER_IMAGE = devops-hand-in-g09a
 
 check-vars:
