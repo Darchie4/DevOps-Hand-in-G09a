@@ -27,7 +27,7 @@ jobs:
       - name: deploying helm charts
         working-directory: ./helm/helm-bin
         run: |
-          sudo chmod +x ./helm
+          chmod +x ./helm
           ./helm helm install redis ../fortune/databases/ -f ../fortune/databases/redis-value.yaml
           ./helm helm install backend ../fortune/fortune-application/ -f ../fortune/fortune-application/backend-values.yaml
           ./helm helm install frontend ../fortune/fortune-application/ -f ../fortune/fortune-application/frontend-values.yaml
