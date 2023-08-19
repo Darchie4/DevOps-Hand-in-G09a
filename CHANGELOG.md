@@ -1,3 +1,16 @@
+# v0.0.2 (Sat Aug 19 2023)
+
+#### ⚠️ Pushed to `main`
+
+- Merge branch 'main' of https://github.com/Darchie4/DevOps-Hand-in-G09a ([@OthelloEngineer](https://github.com/OthelloEngineer))
+- debugging runner ([@OthelloEngineer](https://github.com/OthelloEngineer))
+
+#### Authors: 1
+
+- Joakim Leed ([@OthelloEngineer](https://github.com/OthelloEngineer))
+
+---
+
 # v0.0.1 (Sat Aug 19 2023)
 
 #### ⚠️ Pushed to `main`
