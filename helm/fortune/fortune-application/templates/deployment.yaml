@@ -19,11 +19,11 @@ spec:
         spec:
             containers:
                 - name: {{.Release.Name | quote}}
-                    image: "ghcr.io/darchie4/devops-hand-in-g09a:{{.Values.image.version}}"
+                    image: "ghcr.io/darchie4/devops-hand-in-g09a:{{.Values.image.version}}" # yamllint disable-line
                     ports:
                         - containerPort: {{.Values.image.port}}
                     env:
                         {{- range .Values.envs}}
-                        - name: {{.name}} ##yamllint disable-line rule:indentation
+                        - name: {{.name}} # yamllint disable-line
                           value:  {{.value | quote}}
                         {{- end}}
