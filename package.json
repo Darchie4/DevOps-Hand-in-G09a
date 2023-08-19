@@ -1,0 +1,39 @@
+{
+    "name": "devops-hand-in-g09a",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Darchie4/DevOps-Hand-in-G09a.git"
+    },
+    "scripts": {
+        "bootstrap": "lerna bootstrap --hoist"
+    },
+    "keywords": [],
+    "author": "G09a",
+    "license": "MIT",
+    "homepage": "https://github.com/Darchie4/DevOps-Hand-in-G09a",
+    "auto": {
+        "plugins": [
+            "npm",
+            [
+                "conventional-commits",
+                {
+                    "defaultReleaseType": "patch"
+                }
+            ]
+        ]
+    },
+    "lerna": {
+        "packages": [
+            "frontend",
+            "backend"
+        ],
+        "version": "independent"
+    },
+    "devDependencies": {
+        "@auto-it/conventional-commits": "^11.0.1",
+        "@auto-it/git-tag": "^11.0.1",
+        "auto": "^10.29.3",
+        "lerna": "^4.0.0"
+    }
+}

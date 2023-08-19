@@ -3,3 +3,8 @@ backend/backend
 
 # frontend binary
 frontend/frontend
+
+.env
+
+# npm
+node_modules/
