@@ -27,7 +27,7 @@ spec:
               name: {{.Values.volume.name}}
           spec:
               accessModes:
-              -  ReadWriteOnce
+                  - ReadWriteOnce
               resources:
                   requests:
                       storage: {{.Values.volume.storageSize}}
