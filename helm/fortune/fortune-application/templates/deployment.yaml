@@ -19,9 +19,7 @@ spec:
         spec:
             containers:
                 - name: {{.Release.Name | quote}}
-                    image: |
-                      'ghcr.io/darchie4/devops-hand-in-g09a:
-                      {{.Values.image.version}}'
+                    image: "ghcr.io/darchie4/devops-hand-in-g09a:{{.Values.image.version}}"
                     ports:
                         - containerPort: {{.Values.image.port}}
                     env:
