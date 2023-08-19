@@ -19,11 +19,13 @@ spec:
         spec:
             containers:
                 - name: {{.Release.Name | quote}}
-                    image: "ghcr.io/darchie4/devops-hand-in-g09a:{{.Values.image.version}}" # yamllint disable-line
+                    # yamllint disable-line
+                    image: "ghcr.io/darchie4/devops-hand-in-g09a:{{.Values.image.version}}" 
                     ports:
                         - containerPort: {{.Values.image.port}}
                     env:
                         {{- range .Values.envs}}
-                        - name: {{.name}} # yamllint disable-line
+                        # yamllint disable-line
+                        - name: {{.name}} 
                           value:  {{.value | quote}}
                         {{- end}}

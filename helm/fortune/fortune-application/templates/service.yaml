@@ -9,7 +9,8 @@ spec:
     - port: {{.Values.service.port}}
       targetPort: {{.Values.image.port}}
       {{- if eq .Values.service.type "NodePort"}}
-      nodePort: {{.Values.service.nodePort}} # yamllint disable-line
+      # yamllint disable-line
+      nodePort: {{.Values.service.nodePort}} 
       {{- end}}
   selector:
     app: {{.Release.Name}}
