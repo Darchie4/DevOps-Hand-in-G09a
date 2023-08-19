@@ -1,8 +1,9 @@
-image: 
+---
+image:
   app: redis
   version: 7.2.0
   port: 6379
-  
+
 volume:
   name: fortunes
   mountPath: /data

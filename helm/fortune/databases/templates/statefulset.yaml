@@ -1,33 +1,34 @@
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-    name: {{ .Release.Name }}
+    name: {{.Release.Name}}
 spec:
     selector:
         matchLabels:
-            app: {{ .Release.Name }}
-    serviceName: "{{ .Release.Name }}-headless"
+            app: {{.Release.Name}}
+    serviceName: "{{.Release.Name}}-headless"
     replicas: 1
     template:
         metadata:
             labels:
-                app: {{ .Release.Name }}
+                app: {{.Release.Name}}
         spec:
             containers:
-                -   name: {{ .Release.Name }}
-                    image: "{{ .Values.image.app }}:{{ .Values.image.version }}"
+                -   name: {{.Release.Name}}
+                    image: "{{.Values.image.app}}:{{.Values.image.version}}"
                     ports:
-                        -   containerPort: {{ .Values.image.port }}
+                        -   containerPort: {{.Values.image.port}}
                     volumeMounts:
-                        -   name: {{ .Values.volume.name }}
-                            mountPath: {{ .Values.volume.mountPath}}
+                        -   name: {{.Values.volume.name}}
+                            mountPath: {{.Values.volume.mountPath}}
     volumeClaimTemplates:
     -   metadata:
-            name: {{ .Values.volume.name }}
+            name: {{.Values.volume.name}}
         spec:
             accessModes:
             -   ReadWriteOnce
             resources:
                 requests:
-                    storage: {{ .Values.volume.storageSize}}
+                    storage: {{.Values.volume.storageSize}}
             storageClassName: gp2 
