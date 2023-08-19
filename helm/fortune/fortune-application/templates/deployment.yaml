@@ -20,12 +20,12 @@ spec:
             containers:
                 - name: {{.Release.Name | quote}}
                     image: |
-                        'ghcr.io/darchie4/devops-hand-in-g09a:
-                        {{.Values.image.version}}'
+                      'ghcr.io/darchie4/devops-hand-in-g09a:
+                      {{.Values.image.version}}'
                     ports:
                         - containerPort: {{.Values.image.port}}
                     env:
-                        {{- range .Values.envs}}
-                        - name: {{.name}}
-                          value: {{.value | quote}}
-                        {{- end}}
+                    {{- range .Values.envs}}
+                    - name: {{.name}}
+                      value:  {{.value | quote}}
+                    {{- end}}
