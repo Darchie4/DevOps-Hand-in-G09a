@@ -22,6 +22,8 @@ jobs:
         run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
       - name: Apply Kubernetes manifests
         run: kubectl apply -f kubernetes/
+      - name: ls
+        run: ls
       - name: deploying helm charts
         working-directory: ./helm/helm-bin
         run: |
