@@ -1,6 +1,7 @@
 image:
   port: 9000
-  version: main-backend
+  version: 1.0.0
+  name: backend
 envs:
 - name: REDIS_DNS
   value: "redis"
