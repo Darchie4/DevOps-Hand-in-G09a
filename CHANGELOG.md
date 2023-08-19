@@ -1,3 +1,15 @@
+# v0.0.7 (Sat Aug 19 2023)
+
+#### ⚠️ Pushed to `main`
+
+- added trailing new space ([@OthelloEngineer](https://github.com/OthelloEngineer))
+
+#### Authors: 1
+
+- Joakim Leed ([@OthelloEngineer](https://github.com/OthelloEngineer))
+
+---
+
 # v0.0.6 (Sat Aug 19 2023)
 
 #### ⚠️ Pushed to `main`
