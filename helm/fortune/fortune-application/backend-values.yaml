@@ -9,5 +9,5 @@ envs:
     value: "6379"
 
 service:
-  type: ClusterIP 
+  type: ClusterIP
   port: 9000

@@ -25,6 +25,6 @@ jobs:
       - name: deploying helm charts
         working-directory: ./helm/helm-bin
         run: |
-          helm install redis ../fortune/databases/ -f ../fortune/databases/redis-value.yaml 
+          helm install redis ../fortune/databases/ -f ../fortune/databases/redis-value.yaml
           helm install backend ../fortune/fortune-application/ -f ../fortune/fortune-application/backend-values.yaml
           helm install frontend ../fortune/fortune-application/ -f ../fortune/fortune-application/frontend-values.yaml

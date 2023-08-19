@@ -18,17 +18,17 @@ spec:
                 - name: {{.Release.Name}}
                   image: "{{.Values.image.app}}:{{.Values.image.version}}"
                   ports:
-                        - containerPort: {{.Values.image.port}}
-                    volumeMounts:
-                        - name: {{.Values.volume.name}}
-                          mountPath: {{.Values.volume.mountPath}}
+                      - containerPort: {{.Values.image.port}}
+                  volumeMounts:
+                      - name: {{.Values.volume.name}}
+                        mountPath: {{.Values.volume.mountPath}}
     volumeClaimTemplates:
-        -  metadata:
-                name: {{.Values.volume.name}}
-            spec:
-                accessModes:
-                -  ReadWriteOnce
-                resources:
-                    requests:
-                        storage: {{.Values.volume.storageSize}}
-                storageClassName: gp2
+        - metadata:
+              name: {{.Values.volume.name}}
+          spec:
+              accessModes:
+              -  ReadWriteOnce
+              resources:
+                  requests:
+                      storage: {{.Values.volume.storageSize}}
+              storageClassName: gp2
