@@ -23,7 +23,7 @@ spec:
                     ports:
                         - containerPort: {{.Values.image.port}}
                     env:
-                    {{- range .Values.envs}}
-                    - name: {{.name}}
-                      value:  {{.value | quote}}
-                    {{- end}}
+                        {{- range .Values.envs}}
+                        - name: {{.name}} ##yamllint disable-line rule:indentation
+                          value:  {{.value | quote}}
+                        {{- end}}
