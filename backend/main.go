@@ -147,7 +147,7 @@ func (h *fortuneHandler) Create(w http.ResponseWriter, r *http.Request) {
 	h.store.Lock()
 	h.store.m[u.ID] = u
 	h.store.Unlock()
-
+	fmt.Printf("using redis = %t \n", usingRedis)
 	if usingRedis {
 		_, err := dbLink.Do("hset", "fortunes", u.ID, u.Message)
 		if err != nil {
