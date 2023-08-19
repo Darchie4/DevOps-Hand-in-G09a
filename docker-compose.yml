@@ -1,14 +1,31 @@
 ---
-version: "3.8"
+version: '3.8'
 
 services:
+  redis:
+    image: redis
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: ./backend
+    ports:
+      - "9000:9000"
+    depends_on:
+      - redis
+    environment:
+      REDIS_DNS: redis
+      REDIS_PORT: 6379
+
   frontend:
     build: ./frontend
     ports:
-      - "8083:8081"
-    environment:
-      - BACKEND_DNS=backend
+      - "8081:8081"
     depends_on:
       - backend
-  backend:
-    build: ./backend
+
+volumes:
+  redis_data:
+    driver: local
