@@ -1,5 +1,5 @@
+# yamllint disable file
 ---
-# yamllint disable
 apiVersion: v1
 kind: Service
 metadata:
@@ -10,9 +10,7 @@ spec:
     - port: {{.Values.service.port}}
       targetPort: {{.Values.image.port}}
       {{- if eq .Values.service.type "NodePort"}}
-      # yamllint disable-line
       nodePort: {{.Values.service.nodePort}}
       {{- end}}
   selector:
     app: {{.Release.Name}}
-# yamllint enable

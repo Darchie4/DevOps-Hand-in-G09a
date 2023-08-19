@@ -1,3 +1,4 @@
+# yamllint disable file
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -19,7 +20,6 @@ spec:
         spec:
             containers:
                 - name: {{.Release.Name | quote}}
-                    # yamllint disable
                     image: "ghcr.io/darchie4/devops-hand-in-g09a:{{.Values.image.version}}" 
                     ports:
                         - containerPort: {{.Values.image.port}}
@@ -28,4 +28,3 @@ spec:
                         - name: {{.name}} 
                           value:  {{.value | quote}}
                         {{- end}}
-                    # yamllint enable
