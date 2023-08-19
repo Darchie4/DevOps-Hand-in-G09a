@@ -1,3 +1,15 @@
+# v0.0.5 (Sat Aug 19 2023)
+
+#### ⚠️ Pushed to `main`
+
+- fixed helm commands ([@OthelloEngineer](https://github.com/OthelloEngineer))
+
+#### Authors: 1
+
+- Joakim Leed ([@OthelloEngineer](https://github.com/OthelloEngineer))
+
+---
+
 # v0.0.4 (Sat Aug 19 2023)
 
 #### ⚠️ Pushed to `main`
