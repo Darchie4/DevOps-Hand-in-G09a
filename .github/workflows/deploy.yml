@@ -28,6 +28,6 @@ jobs:
         working-directory: ./helm/helm-bin
         run: |
           chmod +x ./helm
-          ./helm install redis ../fortune/databases/ -f ../fortune/databases/redis-value.yaml
-          ./helm install backend ../fortune/fortune-application/ -f ../fortune/fortune-application/backend-values.yaml
-          ./helm install frontend ../fortune/fortune-application/ -f ../fortune/fortune-application/frontend-values.yaml
+          ./helm upgrade redis ../fortune/databases/ -f ../fortune/databases/redis-value.yaml -i
+          ./helm upgrade backend ../fortune/fortune-application/ -f ../fortune/fortune-application/backend-values.yaml -i
+          ./helm upgrade frontend ../fortune/fortune-application/ -f ../fortune/fortune-application/frontend-values.yaml -i
