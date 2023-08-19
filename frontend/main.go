@@ -39,7 +39,7 @@ func HealthzHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 
 	http.HandleFunc("/healthz", HealthzHandler)
-	fmt.Print("starting up")
+	fmt.Print("starting up...")
 	http.HandleFunc("/api/random", func(w http.ResponseWriter, r *http.Request) {
 		resp, err := myClient.Get(fmt.Sprintf("http://%s:%s/fortunes/random", BACKEND_DNS, BACKEND_PORT)) //nolint:all
 		if err != nil {
