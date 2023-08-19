@@ -1,13 +1,14 @@
+---
 image:
   port: 8081
   version: main-frontend
 envs:
-- name: BACKEND_DNS
-  value: "backend"
-- name: BACKEND_PORT
-  value: "9000"
+  - name: BACKEND_DNS
+    value: "backend"
+  - name: BACKEND_PORT
+    value: "9000"
 
 service:
-  type: NodePort 
+  type: NodePort
   port: 9000
   nodePort: 32063
