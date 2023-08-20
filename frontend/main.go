@@ -77,7 +77,6 @@ func main() {
 	fmt.Print("starting up...")
 	http.HandleFunc("/api/random", func(w http.ResponseWriter, r *http.Request) {
 		resp, err := myClient.Get(fmt.Sprintf("http://%s:%s/fortunes/random", BACKEND_DNS, BACKEND_PORT)) //nolint:all
-		if()
 		if LOG_LEVEL == "WARNING" {
 			fmt.Println("creating random cookie")
 			fmt.Println(resp)

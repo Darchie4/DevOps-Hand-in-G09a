@@ -121,7 +121,6 @@ func (h *fortuneHandler) Random(w http.ResponseWriter, r *http.Request) {
 	} else {
 		r.URL.Path = "/fortunes/zero"
 	}
-
 	h.Get(w, r)
 }
 
