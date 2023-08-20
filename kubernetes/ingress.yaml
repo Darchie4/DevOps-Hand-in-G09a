@@ -14,7 +14,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: service-a
+              name: frontend
               port:
                 number: 5000
         - path: /grafana
