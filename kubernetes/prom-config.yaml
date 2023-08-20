@@ -32,7 +32,7 @@ data:
     scrape_configs:
       - job_name: 'fortune-cookie'
         static_configs:
-          - targets: ['backend:9000']
+          - targets: ['k8s-student3-ingress2-b8bfaaab6f-1896391073.eu-north-1.elb.amazonaws.com']
       - job_name: 'node-exporter'
         static_configs:
           - targets: ['node-exporter:9100']
