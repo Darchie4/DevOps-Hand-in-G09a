@@ -2,7 +2,7 @@ name: deploy
 
 on:
   workflow_run:
-    workflows: [Go package]
+    workflows: [Release Pipeline]
     types:
       - completed
 
