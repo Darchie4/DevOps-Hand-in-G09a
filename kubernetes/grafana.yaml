@@ -47,7 +47,9 @@ spec:
             runAsUser: 0
           env:
             - name: GF_SERVER_ROOT_URL
-              value: "http://13.51.167.206:30275/"
+              value: "http://k8s-student3-ingress2-b8bfaaab6f-1896391073.eu-north-1.elb.amazonaws.com/grafana"
+            - name: GF_SERVER_SERVE_FROM_SUB_PATH
+              value: "true"
   volumeClaimTemplates:
     - metadata:
         name: grafana-pv
