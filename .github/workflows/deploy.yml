@@ -21,11 +21,13 @@ jobs:
         run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
       - name: Apply Kubernetes manifests
         run: kubectl apply -f kubernetes/
+      - name: Curl test
+        run: ./tests/curl-test.sh
       - name: update helm releases
         run: |
           sed -i "s/\(version: \).*/\1$(grep -oP 'version": "\K[^"]+' ./frontend/package.json)/" ./helm/fortune/fortune-application/frontend-values.yaml
           sed -i "s/\(version: \).*/\1$(grep -oP 'version": "\K[^"]+' ./backend/package.json)/" ./helm/fortune/fortune-application/backend-values.yaml
-      - name: deploying helm charts
+      - name: Deploying helm charts
         working-directory: ./helm/helm-bin
         run: |
           chmod +x ./helm
