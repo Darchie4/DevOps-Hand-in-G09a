@@ -28,6 +28,8 @@ var (
 		Name: "fortunes_granted_total",
 		Help: "The total number of custom fortunes granted",
 	})
+	healtz = regexp.MustCompile(`^/healthz[/]*$`)
+
 )
 
 type fortune struct {
@@ -66,11 +68,23 @@ func (h *fortuneHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case r.Method == http.MethodPost && createFortuneRe.MatchString(r.URL.Path):
 		h.Create(w, r)
 		return
+	case r.Method == http.MethodGet && healtz.MatchString(r.URL.Path):
+		h.Healthz(w, r)
+		return
 	default:
 		notFound(w, r)
 		return
 	}
 }
+
+func (h *fortuneHandler) Healthz(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	_, err := w.Write([]byte("healthy"))
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 
 func (h *fortuneHandler) List(w http.ResponseWriter, r *http.Request) {
 	h.store.RLock()
@@ -194,14 +208,17 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	//http.HandleFunc("/healthz", HealthzHandler)
 	mux := http.NewServeMux()
 	fortuneH := &fortuneHandler{
 		store: &datastoreDefault,
 	}
 	mux.Handle("/fortunes", fortuneH)
 	mux.Handle("/fortunes/", fortuneH)
+
 	http.Handle("/metrics", promhttp.Handler())
 	http.ListenAndServe(":2112", nil)
+	mux.Handle("/healthz", fortuneH)
 	err := http.ListenAndServe(":9000", mux)
 	if err != nil {
 		log.Fatal(err)
