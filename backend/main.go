@@ -16,7 +16,7 @@ var (
 	getFortuneRe    = regexp.MustCompile(`^/fortunes[/](\d+)$`)
 	randomFortuneRe = regexp.MustCompile(`^/fortunes[/]random$`)
 	createFortuneRe = regexp.MustCompile(`^/fortunes[/]*$`)
-	healtz = regexp.MustCompile(`^/healtz[/]*$`)
+	healtz = regexp.MustCompile(`^/healthz[/]*$`)
 )
 
 type fortune struct {
@@ -55,8 +55,8 @@ func (h *fortuneHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case r.Method == http.MethodPost && createFortuneRe.MatchString(r.URL.Path):
 		h.Create(w, r)
 		return
-	case r.Method == http.MethodPost && healtz.MatchString(r.URL.Path):
-		h.Healtz(w, r)
+	case r.Method == http.MethodGet && healtz.MatchString(r.URL.Path):
+		h.Healthz(w, r)
 		return
 	default:
 		notFound(w, r)
@@ -64,8 +64,12 @@ func (h *fortuneHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *fortuneHandler) Healtz(w http.ResponseWriter, r *http.Request) {
+func (h *fortuneHandler) Healthz(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
+	_, err := w.Write([]byte("healthy"))
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 
@@ -190,13 +194,14 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	//http.HandleFunc("/healthz", HealthzHandler)
 	mux := http.NewServeMux()
 	fortuneH := &fortuneHandler{
 		store: &datastoreDefault,
 	}
 	mux.Handle("/fortunes", fortuneH)
 	mux.Handle("/fortunes/", fortuneH)
-	mux.Handle("/healtz", fortuneH)
+	mux.Handle("/healthz", fortuneH)
 
 	err := http.ListenAndServe(":9000", mux)
 	if err != nil {

@@ -4,25 +4,41 @@ import (
     "net/http"
     "net/http/httptest"
     "testing"
+    "io/ioutil"
 )
 
 func TestHealthz(t *testing.T) {
-    _, err := http.NewRequest("GET", "/healthz", nil)
-    if err != nil {
-        t.Fatal(err)
-    }
+	mux := http.NewServeMux()
+	fortuneH := &fortuneHandler{
+		store: &datastoreDefault,
+	}
 
-    rr := httptest.NewRecorder()
+	mux.Handle("/healthz", fortuneH)
 
-    status := rr.Code;
+	server := httptest.NewServer(mux)
 
-    if status != http.StatusOK {
-        t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
-    }
+	// Make a GET request to /healthz
+	resp, err := http.Get(server.URL + "/healthz")
+	if err != nil {
+		t.Fatalf("Error making request: %v", err)
+	}
+	defer resp.Body.Close()
 
-    expected := "healthy"
-    if rr.Body.String() != expected {
-        t.Errorf("handler returned unexpected body: got %v want %v",
-            rr.Body.String(), expected)
-    }
+	// Check the status code
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("Expected status code %d, but got %d", http.StatusOK, resp.StatusCode)
+	}
+
+	// Read the response body
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatalf("Error reading response body: %v", err)
+	}
+
+	// Check the response body content
+	expectedBody := "healthy"
+	if string(body) != expectedBody {
+		t.Errorf("Expected response body %q, but got %q", expectedBody, string(body))
+	}
+
 }
