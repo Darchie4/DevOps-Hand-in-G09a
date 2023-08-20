@@ -16,6 +16,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+var LOG_LEVEL = getEnv("LOG-LEVEL", "info")
+
 var (
 	listFortuneRe         = regexp.MustCompile(`^/fortunes[/]*$`)
 	getFortuneRe          = regexp.MustCompile(`^/fortunes[/](\d+)$`)
@@ -133,7 +135,7 @@ func (h *fortuneHandler) Get(w http.ResponseWriter, r *http.Request) {
 	if usingRedis {
 		key := matches[1]
 		val, err := dbLink.Do("hget", "fortunes", key)
-		if err != nil {
+		if err != nil && LOG_LEVEL == "WARNING" {
 			fmt.Println("redis hget failed", err.Error())
 		} else {
 			if val != nil {

@@ -30,6 +30,12 @@ spec:
                       - containerPort: {{.Values.image.port}}
                   env:
                       {{- range .Values.envs}}
-                      - name: {{.name}} 
+                      - name: {{.name}}
                         value:  {{.value | quote}}
                        {{- end}}
+                      - name: LOG-LEVEL
+                        valueFrom:
+                            configMapKeyRef:
+                                name: fortune-log-level
+                                key: LOG-LEVEL
+                                optional: true
