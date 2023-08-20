@@ -15,7 +15,7 @@ import (
 
 var BACKEND_DNS = getEnv("BACKEND_DNS", "localhost")
 var BACKEND_PORT = getEnv("BACKEND_PORT", "9000")
-
+var LOG_LEVEL = getEnv("LOG-LEVEL", "info")
 type fortune struct {
 	ID      string `json:"id" redis:"id"`
 	Message string `json:"message" redis:"message"`
@@ -73,6 +73,10 @@ func main() {
 	fmt.Print("starting up...")
 	http.HandleFunc("/api/random", func(w http.ResponseWriter, r *http.Request) {
 		resp, err := myClient.Get(fmt.Sprintf("http://%s:%s/fortunes/random", BACKEND_DNS, BACKEND_PORT)) //nolint:all
+		if LOG_LEVEL == "WARNING" {
+			fmt.Println("creating random cookie")
+			fmt.Println(resp)
+		}
 		if err != nil {
 			log.Fatalln(err)
 			fmt.Fprint(w, err)
@@ -103,7 +107,7 @@ func main() {
 		}
 
 		tmpl, err := template.ParseFiles("./templates/fortunes.html")
-
+		
 		if err != nil {
 			log.Fatalln(err)
 			fmt.Fprint(w, err)
