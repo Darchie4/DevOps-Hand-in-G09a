@@ -7,7 +7,13 @@ import (
 )
 
 func TestHealthz(t *testing.T) {
-
+    server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        w.Write([]byte([{"id":"2","message":"The measure of time to your next goal is the measure of your discipline."},
+        {"id":"3","message":"The only way to do well is to do better each day."},
+        {"id":"4","message":"It ain't over till it's EOF."},
+        {"id":"1","message":"A new voyage will fill your life with untold memories."}]))
+    }))
+    defer server.Close()
     // Create a request to pass to our handler. We don't have any query parameters for now, so we'll
     // pass 'nil' as the third parameter.
     req, err := http.NewRequest("GET", "/healthz", nil)
