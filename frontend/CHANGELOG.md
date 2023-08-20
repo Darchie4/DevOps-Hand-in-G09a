@@ -1,3 +1,10 @@
+# [frontend-v1.2.0](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/frontend-v1.1.0...frontend-v1.2.0) (2023-08-20)
+
+
+### Features
+
+* create tech debt ([5b717c6](https://github.com/Darchie4/DevOps-Hand-in-G09a/commit/5b717c63a8ba3c201f5b58bb8bc899de5fa9a2d4))
+
 # [frontend-v1.1.0](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/frontend-v1.0.2...frontend-v1.1.0) (2023-08-20)
 
 
