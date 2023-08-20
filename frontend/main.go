@@ -42,8 +42,8 @@ func main() {
 	fmt.Print("starting up...")
 	http.HandleFunc("/api/random", func(w http.ResponseWriter, r *http.Request) {
 		resp, err := myClient.Get(fmt.Sprintf("http://%s:%s/fortunes/random", BACKEND_DNS, BACKEND_PORT)) //nolint:all
-		fmt.println("creating random cookie")
-		fmt.println(resp)
+		fmt.Println("creating random cookie")
+		fmt.Println(resp)
 		if err != nil {
 			log.Fatalln(err)
 			fmt.Fprint(w, err)
