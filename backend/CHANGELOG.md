@@ -1,3 +1,10 @@
+# [backend-v1.2.1](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/backend-v1.2.0...backend-v1.2.1) (2023-08-20)
+
+
+### Bug Fixes
+
+* prometheus use mux ([a87fd3b](https://github.com/Darchie4/DevOps-Hand-in-G09a/commit/a87fd3be0da1a287cb23ae37c360730c2185bbb4))
+
 # [backend-v1.2.0](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/backend-v1.1.0...backend-v1.2.0) (2023-08-20)
 
 
