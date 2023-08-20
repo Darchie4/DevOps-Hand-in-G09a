@@ -1,0 +1,48 @@
+---
+name: Development Pipeline
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Build
+        run: make build
+
+      - name: Test
+        run: make test
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: YAML Linting
+        uses: ibiqlik/action-yamllint@v3
+
+      - name: Commit Linting
+        uses: wagoid/commitlint-github-action@v5
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Go Linting
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: ./backend/... ./frontend/...
