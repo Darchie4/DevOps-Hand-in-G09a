@@ -19,6 +19,7 @@ var (
 	getFortuneRe           = regexp.MustCompile(`^/fortunes[/](\d+)$`)
 	randomFortuneRe        = regexp.MustCompile(`^/fortunes[/]random$`)
 	createFortuneRe        = regexp.MustCompile(`^/fortunes[/]*$`)
+	healtz = regexp.MustCompile(`^/healtz[/]*$`)
 	customFortunesCreated = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "custom_fortunes_total",
 		Help: "The total number of custom fortune cookies created",
@@ -65,11 +66,19 @@ func (h *fortuneHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case r.Method == http.MethodPost && createFortuneRe.MatchString(r.URL.Path):
 		h.Create(w, r)
 		return
+	case r.Method == http.MethodPost && healtz.MatchString(r.URL.Path):
+		h.Healtz(w, r)
+		return
 	default:
 		notFound(w, r)
 		return
 	}
 }
+
+func (h *fortuneHandler) Healtz(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
 
 func (h *fortuneHandler) List(w http.ResponseWriter, r *http.Request) {
 	h.store.RLock()
@@ -201,6 +210,7 @@ func main() {
 	mux.Handle("/fortunes/", fortuneH)
 	http.Handle("/metrics", promhttp.Handler())
 	http.ListenAndServe(":2112", nil)
+	mux.Handle("/healtz", fortuneH)
 	err := http.ListenAndServe(":9000", mux)
     fmt.Println("%v", err)
 }
