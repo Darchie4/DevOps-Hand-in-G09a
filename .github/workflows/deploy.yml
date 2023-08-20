@@ -3,7 +3,7 @@ name: deploy
 
 on:
   workflow_run:
-    workflows: [Main]
+    workflows: [Release Pipeline]
     types:
       - completed
 
