@@ -8,13 +8,25 @@ import (
 	"net/http"
 	"regexp"
 	"sync"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
-	listFortuneRe   = regexp.MustCompile(`^/fortunes[/]*$`)
-	getFortuneRe    = regexp.MustCompile(`^/fortunes[/](\d+)$`)
-	randomFortuneRe = regexp.MustCompile(`^/fortunes[/]random$`)
-	createFortuneRe = regexp.MustCompile(`^/fortunes[/]*$`)
+	listFortuneRe          = regexp.MustCompile(`^/fortunes[/]*$`)
+	getFortuneRe           = regexp.MustCompile(`^/fortunes[/](\d+)$`)
+	randomFortuneRe        = regexp.MustCompile(`^/fortunes[/]random$`)
+	createFortuneRe        = regexp.MustCompile(`^/fortunes[/]*$`)
+	customFortunesCreated = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "custom_fortunes_total",
+		Help: "The total number of custom fortune cookies created",
+	})
+	fortunesGiven = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "fortunes_granted_total",
+		Help: "The total number of custom fortunes granted",
+	})
 )
 
 type fortune struct {
@@ -66,7 +78,7 @@ func (h *fortuneHandler) List(w http.ResponseWriter, r *http.Request) {
 		fortunes = append(fortunes, v)
 	}
 	h.store.RUnlock()
-
+	fortunesGiven.Add(float64(len(h.store.m)))
 	jsonBytes, err := json.Marshal(fortunes)
 	if err != nil {
 		internalServerError(w, r)
@@ -83,7 +95,7 @@ func (h *fortuneHandler) Random(w http.ResponseWriter, r *http.Request) {
 		fortunes = append(fortunes, v)
 	}
 	h.store.RUnlock()
-
+	fortunesGiven.Inc()
 	if len(fortunes) > 0 {
 		u := fortunes[rand.Intn(len(fortunes))]
 		r.URL.Path = "/fortunes/" + u.ID
@@ -100,7 +112,7 @@ func (h *fortuneHandler) Get(w http.ResponseWriter, r *http.Request) {
 		notFound(w, r)
 		return
 	}
-
+	
 	if usingRedis {
 		key := matches[1]
 		val, err := dbLink.Do("hget", "fortunes", key)
@@ -143,6 +155,7 @@ func (h *fortuneHandler) Create(w http.ResponseWriter, r *http.Request) {
 		internalServerError(w, r)
 		return
 	}
+	customFortunesCreated.Inc()
 	h.store.Lock()
 	h.store.m[u.ID] = u
 	h.store.Unlock()
@@ -186,7 +199,8 @@ func main() {
 	}
 	mux.Handle("/fortunes", fortuneH)
 	mux.Handle("/fortunes/", fortuneH)
-
+	http.Handle("/metrics", promhttp.Handler())
+	http.ListenAndServe(":2112", nil)
 	err := http.ListenAndServe(":9000", mux)
     fmt.Println("%v", err)
 }
