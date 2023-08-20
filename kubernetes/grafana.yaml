@@ -45,6 +45,9 @@ spec:
               name: grafana-pv
           securityContext:
             runAsUser: 0
+          env:
+            - name: GF_SERVER_ROOT_URL
+              value: "http://13.51.167.206:30275/"
   volumeClaimTemplates:
     - metadata:
         name: grafana-pv
@@ -55,17 +58,3 @@ spec:
           requests:
             storage: 1Gi
         storageClassName: gp2
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: grafana
-spec:
-  ports:
-    - port: 3000
-      protocol: TCP
-      targetPort: http-grafana
-  selector:
-    app: grafana
-  sessionAffinity: None
-  type: NodePort
