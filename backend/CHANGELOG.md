@@ -1,3 +1,10 @@
+# [backend-v1.2.0](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/backend-v1.1.0...backend-v1.2.0) (2023-08-20)
+
+
+### Features
+
+* added prometheus metrics to backend ([bc5a1a8](https://github.com/Darchie4/DevOps-Hand-in-G09a/commit/bc5a1a8908673cf8cfaedcbbc891ec9b7e81eda6))
+
 # [backend-v1.1.0](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/backend-v1.0.0...backend-v1.1.0) (2023-08-20)
 
 
