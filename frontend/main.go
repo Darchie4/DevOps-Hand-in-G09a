@@ -43,10 +43,10 @@ func HealthzHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	if len(fortunes)  != 0 {
+	if len(*fortunes)  != 0 {
 		status = true
 		fmt.Println("test passed")
-		for _, val := range fortunes {
+		for _, val := range *fortunes {
 			fmt.Println(val)
 		}
 	}
@@ -60,7 +60,7 @@ func HealthzHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusServiceUnavailable)
-	_, err := io.WriteString(w, "not so healthy")
+	_, err = io.WriteString(w, "not so healthy")
 	if err != nil {
 		log.Fatal(err)
 	}
