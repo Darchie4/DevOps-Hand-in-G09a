@@ -215,9 +215,7 @@ func main() {
 	}
 	mux.Handle("/fortunes", fortuneH)
 	mux.Handle("/fortunes/", fortuneH)
-
-	http.Handle("/metrics", promhttp.Handler())
-	http.ListenAndServe(":2112", nil)
+	mux.Handle("/metrics", promhttp.Handler())
 	mux.Handle("/healthz", fortuneH)
 	err := http.ListenAndServe(":9000", mux)
 	if err != nil {
