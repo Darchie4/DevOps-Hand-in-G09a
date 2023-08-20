@@ -2,6 +2,7 @@ package main
 
 import (
     "testing"
+    "bytes"
 )
 
 // main_test.go
