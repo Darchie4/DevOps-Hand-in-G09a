@@ -1,7 +1,8 @@
 ---
 image:
   port: 8081
-  version: main-frontend
+  version: 1.0.1
+  name: frontend
 envs:
   - name: BACKEND_DNS
     value: "backend"
