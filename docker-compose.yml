@@ -6,6 +6,8 @@ services:
     image: redis
     volumes:
       - redis_data:/data
+    ports:
+      - "6379:6379"
 
   backend:
     build: ./backend
@@ -14,6 +16,8 @@ services:
     environment:
       REDIS_DNS: redis
       REDIS_PORT: 6379
+    ports:
+      - "9000:9000"
 
   frontend:
     build: ./frontend

@@ -4,6 +4,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"math/rand"
 	"net/http"
@@ -16,10 +17,10 @@ import (
 )
 
 var (
-	listFortuneRe          = regexp.MustCompile(`^/fortunes[/]*$`)
-	getFortuneRe           = regexp.MustCompile(`^/fortunes[/](\d+)$`)
-	randomFortuneRe        = regexp.MustCompile(`^/fortunes[/]random$`)
-	createFortuneRe        = regexp.MustCompile(`^/fortunes[/]*$`)
+	listFortuneRe         = regexp.MustCompile(`^/fortunes[/]*$`)
+	getFortuneRe          = regexp.MustCompile(`^/fortunes[/](\d+)$`)
+	randomFortuneRe       = regexp.MustCompile(`^/fortunes[/]random$`)
+	createFortuneRe       = regexp.MustCompile(`^/fortunes[/]*$`)
 	customFortunesCreated = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "custom_fortunes_total",
 		Help: "The total number of custom fortune cookies created",
@@ -28,8 +29,8 @@ var (
 		Name: "fortunes_granted_total",
 		Help: "The total number of custom fortunes granted",
 	})
-	healtz = regexp.MustCompile(`^/healthz[/]*$`)
-
+	healtz          = regexp.MustCompile(`^/healthz[/]*$`)
+	deleteFortuneRe = regexp.MustCompile(`^/fortunes[/]*$`)
 )
 
 type fortune struct {
@@ -70,6 +71,8 @@ func (h *fortuneHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	case r.Method == http.MethodGet && healtz.MatchString(r.URL.Path):
 		h.Healthz(w, r)
+	case r.Method == http.MethodDelete && deleteFortuneRe.MatchString(r.URL.Path):
+		h.Delete(w, r)
 		return
 	default:
 		notFound(w, r)
@@ -84,7 +87,6 @@ func (h *fortuneHandler) Healthz(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 }
-
 
 func (h *fortuneHandler) List(w http.ResponseWriter, r *http.Request) {
 	h.store.RLock()
@@ -127,7 +129,7 @@ func (h *fortuneHandler) Get(w http.ResponseWriter, r *http.Request) {
 		notFound(w, r)
 		return
 	}
-	
+
 	if usingRedis {
 		key := matches[1]
 		val, err := dbLink.Do("hget", "fortunes", key)
@@ -189,6 +191,30 @@ func (h *fortuneHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonBytes)
+}
+
+func (h *fortuneHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	id_raw, err := io.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println("io.ReadAll failed", err.Error())
+	}
+
+	fmt.Println("delete fortune id = ", string(id_raw))
+
+	h.store.Lock()
+	delete(h.store.m, string(id_raw))
+	h.store.Unlock()
+
+	fmt.Printf("using redis = %t \n", usingRedis)
+	if usingRedis {
+		_, err := dbLink.Do("hdel", "fortunes", string(id_raw))
+		if err != nil {
+			fmt.Println("redis hdel failed", err.Error())
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("delete success"))
 }
 
 func internalServerError(w http.ResponseWriter, r *http.Request) {
