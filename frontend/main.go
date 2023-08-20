@@ -46,7 +46,7 @@ func HealthzHandler(w http.ResponseWriter, r *http.Request) {
 	if len(fortunes)  != 0 {
 		status = true
 		fmt.Println("test passed")
-		for _, val in for range fortunes {
+		for _, val := range fortunes {
 			fmt.Println(val)
 		}
 	}
