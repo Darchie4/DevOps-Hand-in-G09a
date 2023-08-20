@@ -14,11 +14,11 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: service-a
+              name: frontend
               port:
-                number: 5000
+                number: 9000
         - path: /grafana
-          pathTyoe: Prefix
+          pathType: Prefix
           backend:
             service:
               name: grafana
