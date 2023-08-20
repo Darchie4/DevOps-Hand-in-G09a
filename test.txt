@@ -1,3 +1,2 @@
-This i a file created for Pipeline testing pourpeses.
-This is a file made for testing a workflow
+This file is here soly for Workflow testing pouposes.
 If found, please return to Mads
