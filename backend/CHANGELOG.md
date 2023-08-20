@@ -1,3 +1,24 @@
+# [backend-v1.3.0](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/backend-v1.2.1...backend-v1.3.0) (2023-08-20)
+
+
+### Features
+
+* create tech debt ([5b717c6](https://github.com/Darchie4/DevOps-Hand-in-G09a/commit/5b717c63a8ba3c201f5b58bb8bc899de5fa9a2d4))
+
+# [backend-v1.2.1](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/backend-v1.2.0...backend-v1.2.1) (2023-08-20)
+
+
+### Bug Fixes
+
+* prometheus use mux ([a87fd3b](https://github.com/Darchie4/DevOps-Hand-in-G09a/commit/a87fd3be0da1a287cb23ae37c360730c2185bbb4))
+
+# [backend-v1.2.0](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/backend-v1.1.0...backend-v1.2.0) (2023-08-20)
+
+
+### Features
+
+* added prometheus metrics to backend ([bc5a1a8](https://github.com/Darchie4/DevOps-Hand-in-G09a/commit/bc5a1a8908673cf8cfaedcbbc891ec9b7e81eda6))
+
 # [backend-v1.1.0](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/backend-v1.0.0...backend-v1.1.0) (2023-08-20)
 
 

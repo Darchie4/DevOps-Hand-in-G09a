@@ -18,6 +18,8 @@ services:
     environment:
       REDIS_DNS: redis
       REDIS_PORT: 6379
+    ports:
+      - "9000:9000"
 
   frontend:
     build: ./frontend
