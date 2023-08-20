@@ -29,29 +29,17 @@ type newFortune struct {
 var myClient = &http.Client{Timeout: 10 * time.Second}
 
 func HealthzHandler(w http.ResponseWriter, r *http.Request) {
-	
-	status := false
 	resp, err := myClient.Get(fmt.Sprintf("http://%s:%s/fortunes", BACKEND_DNS, BACKEND_PORT)) //nolint:all
 	if err != nil {
 		log.Fatalln(err)
 		fmt.Fprint(w, err)
 		return
 	}
-	fortunes := new([]fortune)
-	err = json.NewDecoder(resp.Body).Decode(fortunes)
-	if err != nil {
-		log.Fatal(err)
-	}
+	defer resp.Body.Close()
 
-	if len(*fortunes)  != 0 {
-		status = true
-		fmt.Println("test passed")
-		for _, val := range *fortunes {
-			fmt.Println(val)
-		}
-	}
-	
-	if status == true {
+	status := HealthMarshaller(resp.Body)
+
+	if status {
 		w.WriteHeader(http.StatusOK)
 		_, err := io.WriteString(w, "healthy")
 		if err != nil {
@@ -64,7 +52,23 @@ func HealthzHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
 
+func HealthMarshaller(resp io.Reader) bool {
+	fortunes := new([]fortune)
+	decoder := json.NewDecoder(resp)
+	if err := decoder.Decode(fortunes); err != nil {
+		log.Fatal(err)
+		return false
+	}
+
+	if len(*fortunes) != 0 {
+		for _, val := range *fortunes {
+			fmt.Println(val)
+		}
+		return true
+	}
+	return false
 }
 
 func main() {
