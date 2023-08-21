@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-stateful
+spec:
+  selector:
+    matchLabels:
+      app: redis-stateful
+  serviceName: redis-headless
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis-stateful
+    spec:
+      containers:
+        - name: redis-stateful
+          image: redis
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: fortunes
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: fortunes
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: gp2

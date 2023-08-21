@@ -1,0 +1,41 @@
+# yamllint disable-file
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{.Release.Name | quote}}
+    labels:
+        app: {{.Release.Name | quote}}
+        version: {{.Release.Version}}
+        app.kubernetes.io/managed-by: "Helm"
+spec:
+    strategy:
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 0
+    replicas: 2
+    selector:
+        matchLabels:
+            app: {{.Release.Name | quote}}
+    template:
+        metadata:
+            labels:
+                app: {{.Release.Name | quote}}
+        spec:
+            containers:
+                - name: {{.Release.Name | quote}}
+                  image: "ghcr.io/darchie4/devops-hand-in-g09a-{{.Values.image.name}}:{{.Values.image.version}}" 
+                  ports:
+                      - containerPort: {{.Values.image.port}}
+                  env:
+                      {{- range .Values.envs}}
+                      - name: {{.name}}
+                        value:  {{.value | quote}}
+                       {{- end}}
+                      - name: LOG-LEVEL
+                        valueFrom:
+                            configMapKeyRef:
+                                name: fortune-log-level
+                                key: LOG-LEVEL
+                                optional: true
