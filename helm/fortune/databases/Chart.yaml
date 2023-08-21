@@ -1,5 +1,0 @@
-apiVersion: v2
-name: fortune_database
-version: 0.1.0
-description: the databases of fortune. Isolated to enable fast, decoupled database switch
-icon: https://cdn-icons-png.flaticon.com/512/2700/2700203.png

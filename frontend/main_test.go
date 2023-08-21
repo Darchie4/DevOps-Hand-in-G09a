@@ -1,12 +1,9 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
-	"io/ioutil"
-	"net/http"
-	"strconv"
-	"testing"
+    "net/http"
+    "net/http/httptest"
+    "testing"
 )
 
 func TestHealthz(t *testing.T) {
@@ -38,55 +35,4 @@ func TestHealthz(t *testing.T) {
         t.Errorf("handler returned unexpected body: got %v want %v",
             rr.Body.String(), expected)
     }
-}
-
-func BenchmarkGetAll(b *testing.B) {
-	resp, err := http.Get("http://localhost:9000/fortunes")
-
-	if err != nil {
-		panic(err)
-	}
-
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		panic(err)
-	}
-
-	// Convert reponse to json list
-	list := []fortune{}
-	err = json.Unmarshal(body, &list)
-	if err != nil {
-		panic(err)
-	}
-
-	// Iterate over list and delete all keys
-	for _, f := range list {
-		var body = []byte(f.ID)
-		_, err := http.Post("http://localhost:9000/api/delete", "text/plain", bytes.NewBuffer(body))
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	// Add keys
-	for i := 0; i < 100; i++ {
-		var body = []byte(`{"id":"` + strconv.Itoa(i) + `", "message": "test"}`)
-		_, err := http.Post("http://localhost:8081/api/add", "application/json", bytes.NewBuffer(body))
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	// Request all keys
-	b.ResetTimer()
-	for j := 0; j < b.N; j++ {
-		_, err := http.Get("http://localhost:8081/api/all")
-		if err != nil {
-			panic(err)
-		}
-	}
-
 }

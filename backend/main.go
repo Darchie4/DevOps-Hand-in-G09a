@@ -1,4 +1,3 @@
-//nolint:all
 package main
 
 import (
@@ -8,29 +7,13 @@ import (
 	"net/http"
 	"regexp"
 	"sync"
-
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-var LOG_LEVEL = getEnv("LOG-LEVEL", "info")
-
 var (
-	listFortuneRe          = regexp.MustCompile(`^/fortunes[/]*$`)
-	getFortuneRe           = regexp.MustCompile(`^/fortunes[/](\d+)$`)
-	randomFortuneRe        = regexp.MustCompile(`^/fortunes[/]random$`)
-	createFortuneRe        = regexp.MustCompile(`^/fortunes[/]*$`)
-	customFortunesCreated = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "custom_fortunes_total",
-		Help: "The total number of custom fortune cookies created",
-	})
-	fortunesGiven = promauto.NewCounter(prometheus.CounterOpts{
-		Name: "fortunes_granted_total",
-		Help: "The total number of custom fortunes granted",
-	})
-	healtz          = regexp.MustCompile(`^/healthz[/]*$`)
-	deleteFortuneRe = regexp.MustCompile(`^/fortunes[/]*$`)
+	listFortuneRe   = regexp.MustCompile(`^/fortunes[/]*$`)
+	getFortuneRe    = regexp.MustCompile(`^/fortunes[/](\d+)$`)
+	randomFortuneRe = regexp.MustCompile(`^/fortunes[/]random$`)
+	createFortuneRe = regexp.MustCompile(`^/fortunes[/]*$`)
 )
 
 type fortune struct {
@@ -69,22 +52,9 @@ func (h *fortuneHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case r.Method == http.MethodPost && createFortuneRe.MatchString(r.URL.Path):
 		h.Create(w, r)
 		return
-	case r.Method == http.MethodGet && healtz.MatchString(r.URL.Path):
-		h.Healthz(w, r)
-	case r.Method == http.MethodDelete && deleteFortuneRe.MatchString(r.URL.Path):
-		h.Delete(w, r)
-		return
 	default:
 		notFound(w, r)
 		return
-	}
-}
-
-func (h *fortuneHandler) Healthz(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	_, err := w.Write([]byte("healthy"))
-	if err != nil {
-		log.Fatal(err)
 	}
 }
 
@@ -95,7 +65,7 @@ func (h *fortuneHandler) List(w http.ResponseWriter, r *http.Request) {
 		fortunes = append(fortunes, v)
 	}
 	h.store.RUnlock()
-	fortunesGiven.Add(float64(len(h.store.m)))
+
 	jsonBytes, err := json.Marshal(fortunes)
 	if err != nil {
 		internalServerError(w, r)
@@ -112,13 +82,14 @@ func (h *fortuneHandler) Random(w http.ResponseWriter, r *http.Request) {
 		fortunes = append(fortunes, v)
 	}
 	h.store.RUnlock()
-	fortunesGiven.Inc()
+
 	if len(fortunes) > 0 {
 		u := fortunes[rand.Intn(len(fortunes))]
 		r.URL.Path = "/fortunes/" + u.ID
 	} else {
 		r.URL.Path = "/fortunes/zero"
 	}
+
 	h.Get(w, r)
 }
 
@@ -132,7 +103,7 @@ func (h *fortuneHandler) Get(w http.ResponseWriter, r *http.Request) {
 	if usingRedis {
 		key := matches[1]
 		val, err := dbLink.Do("hget", "fortunes", key)
-		if err != nil && LOG_LEVEL == "WARNING" {
+		if err != nil {
 			fmt.Println("redis hget failed", err.Error())
 		} else {
 			if val != nil {
@@ -159,10 +130,7 @@ func (h *fortuneHandler) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	_, err = w.Write(jsonBytes)
-	if err != nil {
-		log.Fatal(err)
-	}
+	w.Write(jsonBytes)
 }
 
 func (h *fortuneHandler) Create(w http.ResponseWriter, r *http.Request) {
@@ -171,11 +139,10 @@ func (h *fortuneHandler) Create(w http.ResponseWriter, r *http.Request) {
 		internalServerError(w, r)
 		return
 	}
-	customFortunesCreated.Inc()
 	h.store.Lock()
 	h.store.m[u.ID] = u
 	h.store.Unlock()
-	fmt.Printf("using redis = %t \n", usingRedis)
+
 	if usingRedis {
 		_, err := dbLink.Do("hset", "fortunes", u.ID, u.Message)
 		if err != nil {
@@ -192,57 +159,24 @@ func (h *fortuneHandler) Create(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonBytes)
 }
 
-func (h *fortuneHandler) Delete(w http.ResponseWriter, r *http.Request) {
-	id_raw, err := io.ReadAll(r.Body)
-	if err != nil {
-		fmt.Println("io.ReadAll failed", err.Error())
-	}
-
-	fmt.Println("delete fortune id = ", string(id_raw))
-
-	h.store.Lock()
-	delete(h.store.m, string(id_raw))
-	h.store.Unlock()
-
-	fmt.Printf("using redis = %t \n", usingRedis)
-	if usingRedis {
-		_, err := dbLink.Do("hdel", "fortunes", string(id_raw))
-		if err != nil {
-			fmt.Println("redis hdel failed", err.Error())
-		}
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("delete success"))
-}
-
 func internalServerError(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusInternalServerError)
-	_, err := w.Write([]byte("internal server error"))
-	if err != nil {
-		log.Fatal(err)
-	}
+	w.Write([]byte("internal server error"))
 }
 
 func notFound(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
-	_, err := w.Write([]byte("not found"))
-	if err != nil {
-		log.Fatal(err)
-	}
+	w.Write([]byte("not found"))
 }
 
 func main() {
-	//http.HandleFunc("/healthz", HealthzHandler)
 	mux := http.NewServeMux()
 	fortuneH := &fortuneHandler{
 		store: &datastoreDefault,
 	}
 	mux.Handle("/fortunes", fortuneH)
 	mux.Handle("/fortunes/", fortuneH)
-	http.Handle("/metrics", promhttp.Handler())
-	http.ListenAndServe(":2112", nil)
-	mux.Handle("/healtz", fortuneH)
+
 	err := http.ListenAndServe(":9000", mux)
     fmt.Println("%v", err)
 }

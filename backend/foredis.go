@@ -1,12 +1,10 @@
-//nolint:all
 package main
 
 import (
 	"fmt"
+	"github.com/gomodule/redigo/redis"
 	"log"
 	"sync"
-
-	"github.com/gomodule/redigo/redis"
 )
 
 var dbLink redis.Conn
@@ -27,7 +25,6 @@ func init() {
 			datastoreDefault = datastore{m: map[string]fortune{}, RWMutex: &sync.RWMutex{}}
 			fmt.Printf("*** loading redis fortunes:\n")
 			for _, key := range resKeys {
-				fmt.Printf("Received %d fortunes", len(resKeys))
 				val, err := dbLink.Do("hget", "fortunes", key)
 				if err != nil {
 					fmt.Println("redis hget failed", err.Error())
