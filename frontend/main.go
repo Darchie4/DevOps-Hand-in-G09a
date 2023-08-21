@@ -41,7 +41,7 @@ func HealthzHandler(w http.ResponseWriter, r *http.Request) {
 	status := HealthMarshaller(resp.Body)
 
 	if status {
-	w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusOK)
 		_, err := io.WriteString(w, "healthy")
 		if err != nil {
 			log.Fatal(err)
@@ -148,8 +148,31 @@ func main() {
 		}
 
 		fmt.Fprint(w, "Cookie added!")
+	})
 
-		return
+	http.HandleFunc("/api/delete", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			http.Error(w, "Use POST", http.StatusMethodNotAllowed)
+			return
+		}
+
+		var postUrl = fmt.Sprintf("http://%s:%s/fortunes", BACKEND_DNS, BACKEND_PORT) //nolint:all
+		req, err := http.NewRequest("DELETE", postUrl, r.Body)
+		if err != nil {
+			log.Fatalln(err)
+			fmt.Fprint(w, err)
+			return
+		}
+
+		// send the request
+		_, err = myClient.Do(req)
+		if err != nil {
+			log.Fatalln(err)
+			fmt.Fprint(w, err)
+			return
+		}
+
+		fmt.Fprint(w, "Cookie deleted!")
 	})
 
 	http.Handle("/", http.FileServer(http.Dir("./static")))
