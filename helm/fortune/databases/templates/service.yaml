@@ -1,14 +1,16 @@
+# yamllint disable-file
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}
+  name: {{.Release.Name}}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{.Values.service.type}}
   ports:
-  - port: {{ .Values.service.port }}
-    targetPort: {{ .Values.image.port }}
-    {{- if eq .Values.service.type "NodePort" }}
-    nodePort: {{ .Values.service.nodePort }}
-    {{- end }}
+    - port: {{.Values.service.port}}
+      targetPort: {{.Values.image.port}}
+      {{- if eq .Values.service.type "NodePort"}}
+      nodePort: {{.Values.service.nodePort}}
+      {{- end}}
   selector:
-    app: {{ .Release.Name }}
+    app: {{.Release.Name}}

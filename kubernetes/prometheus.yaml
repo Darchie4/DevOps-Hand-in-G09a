@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -9,7 +10,8 @@ spec:
   selector:
     matchLabels:
       app: prometheus-server
-  serviceName: "prometheus-service"  # You need to provide a serviceName for a StatefulSet
+  serviceName: "prometheus-service"
+  # You need to provide a serviceName for a StatefulSet
   template:
     metadata:
       labels:
@@ -40,11 +42,13 @@ spec:
           configMap:
             defaultMode: 420
             name: prometheus-server-conf
-        # The prometheus-storage-volume using emptyDir has been removed here because it will be created by volumeClaimTemplates
+        # The prometheus-storage-volume using emptyDir has
+        # been removed here because it will be created by volumeClaimTemplates
 
   volumeClaimTemplates:
     - metadata:
-        name: prometheus-storage-volume  # Use the same name as the one in volumeMounts
+        name: prometheus-storage-volume
+        # Use the same name as the one in volumeMounts
       spec:
         accessModes:
           - ReadWriteOnce

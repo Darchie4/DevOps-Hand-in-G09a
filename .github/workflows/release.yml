@@ -76,23 +76,22 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup git user
-        run: |
-            git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
-            git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
-      - name: Prepare repository
-        run: git fetch --unshallow --tags
-
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
         with:
-          node-version: 18.x
-
-      - name: Create Release
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          cache: npm
+          node-version: 18
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npm ci
-          npm run bootstrap
-          npx auto shipit
+        run: yarn workspaces run semantic-release -e semantic-release-monorepo

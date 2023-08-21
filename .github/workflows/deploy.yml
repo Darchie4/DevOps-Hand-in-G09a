@@ -1,3 +1,4 @@
+---
 name: deploy
 
 on:
@@ -23,7 +24,7 @@ jobs:
         run: kubectl apply -f kubernetes/
       - name: Curl test
         run: ./tests/curl-test.sh
-      - name: update helm releases
+      - name: Update helm releases
         run: |
           sed -i "s/\(version: \).*/\1$(grep -oP 'version": "\K[^"]+' ./frontend/package.json)/" ./helm/fortune/fortune-application/frontend-values.yaml
           sed -i "s/\(version: \).*/\1$(grep -oP 'version": "\K[^"]+' ./backend/package.json)/" ./helm/fortune/fortune-application/backend-values.yaml

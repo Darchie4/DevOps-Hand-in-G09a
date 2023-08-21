@@ -4,6 +4,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"log"
 	"math/rand"
 	"net/http"
 	"regexp"
@@ -17,10 +19,10 @@ import (
 var LOG_LEVEL = getEnv("LOG-LEVEL", "info")
 
 var (
-	listFortuneRe          = regexp.MustCompile(`^/fortunes[/]*$`)
-	getFortuneRe           = regexp.MustCompile(`^/fortunes[/](\d+)$`)
-	randomFortuneRe        = regexp.MustCompile(`^/fortunes[/]random$`)
-	createFortuneRe        = regexp.MustCompile(`^/fortunes[/]*$`)
+	listFortuneRe         = regexp.MustCompile(`^/fortunes[/]*$`)
+	getFortuneRe          = regexp.MustCompile(`^/fortunes[/](\d+)$`)
+	randomFortuneRe       = regexp.MustCompile(`^/fortunes[/]random$`)
+	createFortuneRe       = regexp.MustCompile(`^/fortunes[/]*$`)
 	customFortunesCreated = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "custom_fortunes_total",
 		Help: "The total number of custom fortune cookies created",
@@ -240,9 +242,10 @@ func main() {
 	}
 	mux.Handle("/fortunes", fortuneH)
 	mux.Handle("/fortunes/", fortuneH)
-	http.Handle("/metrics", promhttp.Handler())
-	http.ListenAndServe(":2112", nil)
-	mux.Handle("/healtz", fortuneH)
+	mux.Handle("/metrics", promhttp.Handler())
+	mux.Handle("/healthz", fortuneH)
 	err := http.ListenAndServe(":9000", mux)
-    fmt.Println("%v", err)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

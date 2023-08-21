@@ -1,20 +1,27 @@
+# yamllint disable-file
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: {{ .Release.Name | quote }}
+    name: {{.Release.Name | quote}}
     labels:
-        app: {{ .Release.Name | quote }}
-        version: {{ .Release.Version }}
-        app.kubernetes.io/managed-by: "Helm"        
-spec: 
+        app: {{.Release.Name | quote}}
+        version: {{.Release.Version}}
+        app.kubernetes.io/managed-by: "Helm"
+spec:
+    strategy:
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 0
     replicas: 2
-    selector: 
-        matchLabels: 
-            app: {{ .Release.Name | quote}}
-    template: 
-        metadata: 
+    selector:
+        matchLabels:
+            app: {{.Release.Name | quote}}
+    template:
+        metadata:
             labels:
-                app: {{ .Release.Name | quote }}
+                app: {{.Release.Name | quote}}
         spec:
             containers:
                 - name: {{.Release.Name | quote}}

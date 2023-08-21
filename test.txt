@@ -1,2 +1,0 @@
-This file is here soly for Workflow testing pouposes.
-If found, please return to Mads
