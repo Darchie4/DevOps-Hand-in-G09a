@@ -3,3 +3,6 @@ backend/backend
 
 # frontend binary
 frontend/frontend
+
+# node modules
+node_modules/
