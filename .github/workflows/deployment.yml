@@ -22,3 +22,5 @@ jobs:
         run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
       - name: Apply Kubernetes manifests
         run: kubectl apply -f kubernetes/
+      - name: Curl test
+        run: ./tests/curl-test.sh
