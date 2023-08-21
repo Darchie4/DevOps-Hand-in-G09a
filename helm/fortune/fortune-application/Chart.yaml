@@ -1,0 +1,6 @@
+---
+apiVersion: v2
+name: fortune_deployment
+version: 0.1.0
+description: A Helm library chart for generic deployments
+icon: https://cdn-icons-png.flaticon.com/512/2700/2700203.png

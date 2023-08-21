@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend-container
+          image: ghcr.io/darchie4/devops-hand-in-g09a:main-backend
+          ports:
+            - containerPort: 9000
+          env:
+            - name: REDIS_DNS
+              value: "redis"
+            - name: REDIS_PORT
+              value: "6379"
