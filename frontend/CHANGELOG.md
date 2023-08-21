@@ -1,3 +1,15 @@
+# [frontend-v1.3.0](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/frontend-v1.2.0...frontend-v1.3.0) (2023-08-21)
+
+
+### Bug Fixes
+
+* fixed forgotten line ([4d880a3](https://github.com/Darchie4/DevOps-Hand-in-G09a/commit/4d880a34ab1a7101bb4da2c974ed80c6fc60b28b))
+
+
+### Features
+
+* applications using debugging level ([5609e76](https://github.com/Darchie4/DevOps-Hand-in-G09a/commit/5609e760985df14c6d27290f89adb7700ea091bf))
+
 # [frontend-v1.2.0](https://github.com/Darchie4/DevOps-Hand-in-G09a/compare/frontend-v1.1.0...frontend-v1.2.0) (2023-08-20)
 
 
